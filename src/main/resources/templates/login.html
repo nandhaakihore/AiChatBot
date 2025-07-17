@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <title>Login</title>
+    <style>
+        :root {
+            --bg: #ffffff;
+            --text: #000000;
+            --box-bg: #f0f0f0;
+        }
+
+        [data-theme="dark"] {
+            --bg: #121212;
+            --text: #ffffff;
+            --box-bg: #1e1e1e;
+        }
+
+        body {
+            background-color: var(--bg);
+            color: var(--text);
+            font-family: Arial, sans-serif;
+            padding: 2rem;
+            transition: all 0.3s ease;
+        }
+
+        .container {
+            background-color: var(--box-bg);
+            padding: 2rem;
+            border-radius: 10px;
+        }
+
+        .btn {
+            padding: 0.5rem 1rem;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            font-size: 1rem;
+            cursor: pointer;
+        }
+
+        .toggle-theme {
+            margin-top: 1rem;
+            background-color: #555;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h1>Login</h1>
+    <a href="/oauth2/authorization/github" class="btn">Login via GitHub</a><br>
+    <button class="btn toggle-theme" onclick="toggleTheme()">🌓 Toggle Theme</button>
+</div>
+
+<script>
+    function toggleTheme() {
+        const html = document.documentElement;
+        html.setAttribute("data-theme",
+            html.getAttribute("data-theme") === "dark" ? "light" : "dark"
+        );
+    }
+</script>
+</body>
+</html>

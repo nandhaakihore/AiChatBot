@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <title>AI ChatBot</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 2rem;
+            background-color: var(--bg);
+            color: var(--text);
+            transition: all 0.3s ease;
+        }
+
+        :root {
+            --bg: #ffffff;
+            --text: #000000;
+            --box-bg: #f0f0f0;
+            --user-bg: #d2e3fc;
+            --bot-bg: #e5e5e5;
+        }
+
+        [data-theme="dark"] {
+            --bg: #121212;
+            --text: #ffffff;
+            --box-bg: #1e1e1e;
+            --user-bg: #003366;
+            --bot-bg: #333333;
+        }
+
+        textarea {
+            width: 100%;
+            height: 100px;
+            margin-bottom: 1rem;
+            padding: 1rem;
+            font-size: 1rem;
+            resize: vertical;
+        }
+
+        button {
+            padding: 0.6rem 1rem;
+            margin-right: 0.5rem;
+            font-size: 1rem;
+            cursor: pointer;
+        }
+
+        .chat-box {
+            margin-top: 2rem;
+            background-color: var(--box-bg);
+            padding: 1rem;
+            border-radius: 8px;
+            height: 400px;
+            overflow-y: auto;
+        }
+
+        .message {
+            margin-bottom: 1rem;
+            padding: 0.8rem;
+            border-radius: 8px;
+            white-space: pre-wrap;
+        }
+
+        .user {
+            background-color: var(--user-bg);
+            text-align: right;
+        }
+
+        .bot {
+            background-color: var(--bot-bg);
+            text-align: left;
+        }
+
+        .controls {
+            margin-top: 1rem;
+        }
+    </style>
+</head>
+<body>
+
+<h2>AI ChatBot</h2>
+
+<textarea id="prompt" placeholder="Type your message here..."></textarea><br>
+<button onclick="sendPrompt()">Submit</button>
+
+<div class="chat-box" id="chatBox"></div>
+
+<div class="controls">
+    <button onclick="copyLastResponse()">📋 Copy Last Response</button>
+    <button onclick="toggleTheme()">🌓 Toggle Theme</button>
+    <a href="/home" class="btn">🏠 Back to Home</a>
+</div>
+
+
+<script>
+    async function sendPrompt() {
+        const promptInput = document.getElementById("prompt");
+        const prompt = promptInput.value.trim();
+        const chatBox = document.getElementById("chatBox");
+
+        if (!prompt) {
+            alert("Please enter a message.");
+            return;
+        }
+
+        // Show user message
+        appendMessage(prompt, 'user');
+
+        // Show "Thinking..." placeholder
+        const botPlaceholder = appendMessage("Thinking...", 'bot');
+
+        promptInput.value = ""; // Clear prompt
+
+        try {
+            const res = await fetch(`/?m=${encodeURIComponent(prompt)}`);
+            const text = await res.text();
+            botPlaceholder.textContent = text;
+        } catch (err) {
+            botPlaceholder.textContent = "❌ Failed to get a response. Please try again.";
+        }
+
+        chatBox.scrollTop = chatBox.scrollHeight; // Scroll to bottom
+    }
+
+    function appendMessage(text, sender) {
+        const chatBox = document.getElementById("chatBox");
+        const msgDiv = document.createElement("div");
+        msgDiv.className = `message ${sender}`;
+        msgDiv.textContent = text;
+        chatBox.appendChild(msgDiv);
+        return msgDiv;
+    }
+
+    function copyLastResponse() {
+        const responses = document.querySelectorAll('.message.bot');
+        if (responses.length === 0) {
+            alert("No response to copy.");
+            return;
+        }
+        const last = responses[responses.length - 1].textContent;
+        navigator.clipboard.writeText(last).then(() => {
+            const btn = event.target;
+            const original = btn.textContent;
+            btn.textContent = "✅ Copied!";
+            setTimeout(() => btn.textContent = original, 1500);
+        });
+    }
+
+    function toggleTheme() {
+        const html = document.documentElement;
+        html.setAttribute("data-theme",
+            html.getAttribute("data-theme") === "dark" ? "light" : "dark"
+        );
+    }
+</script>
+
+</body>
+</html>

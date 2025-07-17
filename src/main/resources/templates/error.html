@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>Error</title>
+    <style>
+        :root {
+            --bg: #ffffff;
+            --text: #000000;
+            --box-bg: #f0f0f0;
+        }
+
+        [data-theme="dark"] {
+            --bg: #121212;
+            --text: #ffffff;
+            --box-bg: #1e1e1e;
+        }
+
+        body {
+            background-color: var(--bg);
+            color: var(--text);
+            font-family: Arial, sans-serif;
+            padding: 2rem;
+            transition: all 0.3s ease;
+        }
+
+        .container {
+            background-color: var(--box-bg);
+            padding: 2rem;
+            border-radius: 10px;
+        }
+
+        .btn {
+            padding: 0.5rem 1rem;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            font-size: 1rem;
+            cursor: pointer;
+        }
+
+        .toggle-theme {
+            margin-top: 1rem;
+            background-color: #555;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h1>An Error Occurred</h1>
+    <p>We're sorry, but something went wrong.</p>
+    <p><strong>Error Details:</strong>
+        <span th:text="${errorMessage}">Error details will appear here.</span>
+    </p>
+    <a href="/login" class="btn">Back to Log In</a><br>
+    <button class="btn toggle-theme" onclick="toggleTheme()">🌓 Toggle Theme</button>
+</div>
+
+<script>
+    function toggleTheme() {
+        const html = document.documentElement;
+        html.setAttribute("data-theme",
+            html.getAttribute("data-theme") === "dark" ? "light" : "dark"
+        );
+    }
+</script>
+</body>
+</html>

@@ -1,0 +1,23 @@
+spring:
+  application:
+    name:
+      AiChatBot
+  ai:
+    ollama:
+      chat:
+        options:
+          model:
+            llama3
+  security:
+    oauth2:
+      client:
+        registration:
+          github:
+            redirect-uri: "http://localhost:8081/login/oauth2/code/github"
+            clientId: Ov23liWE23lNmZwCqj2x
+            clientSecret: b9d2e954fca1b63a4dd96984fb451afad9fd5b4d
+            scope: read:user
+
+server:
+  port:
+    8081
